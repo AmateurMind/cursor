@@ -20,7 +20,6 @@ public class Expense {
     @NotBlank
     private String category;
 
-    @NotNull
     private LocalDate expenseDate;
 
     private String notes;

@@ -1,12 +1,17 @@
 Expense Tracker (Spring Boot + JDBC + MySQL)
 -----------------------------------------------------------------------
 build with 
+$ & "$env:USERPROFILE\scoop\apps\maven\current\bin\mvn.cmd" package -DskipTests
+
 & "$env:USERPROFILE\scoop\apps\maven\current\bin\mvn.cmd" -DskipTests package
 
 
-run with 
- java -jar target/expenses-tracker-0.0.1-SNAPSHOT.jar --server.port=8081
- and open this http://localhost:8081/
+ run with 
+$env:GEMINI_API_KEY = "AIzaSyBQ1qqJICZ4lBpKsZmBc_NUr6STO-Gsklg"; $env:GEMINI_MODEL = "gemini-2.0-flash"; java -jar .\target\expenses-tracker-0.0.1-SNAPSHOT.jar --server.port=8081
+with AI 
+
+ java -jar target/expenses-tracker-0.0.1-SNAPSHOT.jar --server.port=8080
+ and open this http://localhost:8080/
  SORTED!!
 
  
@@ -21,9 +26,22 @@ Quick Start
    - CREATE DATABASE expenses_tracker;
 2. Update credentials if needed in `src/main/resources/application.properties`.
 3. Run the app:
-   - mvn spring-boot:run
+   - java -jar target/expenses-tracker-0.0.1-SNAPSHOT.jar --server.port=8080
 4. Open UI:
    - http://localhost:8080/
+
+AI Category Suggestions (optional)
+----------------------------------
+The UI has a Smart Categorize button that suggests a category using AI.
+If you set a Gemini API key, it will use Google Gemini; otherwise it uses a local rule-based fallback.
+
+Set environment variables before running:
+- On PowerShell (Windows):
+  - $env:GEMINI_API_KEY = "<your_key_here>"
+  - # optional: choose a model (default: gemini-2.0-flash)
+  - $env:GEMINI_MODEL = "gemini-2.0-flash"
+
+Privacy: only the title and notes you provide are sent to the AI.
 
 REST API
 - GET /api/expenses

@@ -1,0 +1,187 @@
+<mxfile host="app.diagrams.net" modified="2025-10-13T14:45:00.000Z" agent="5.0" version="24.0.0" etag="ER-Diagram-Simple" type="device">
+  <diagram name="Expense Tracker - ER Diagram" id="expenses-er-diagram">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="EXPENSE TRACKER - DATABASE ER DIAGRAM" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="284" y="40" width="600" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- EXPENSES Entity (Main Table) -->
+        <mxCell id="expenses-entity" value="EXPENSES" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=16;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="384" y="150" width="400" height="340" as="geometry" />
+        </mxCell>
+        
+        <!-- Primary Key -->
+        <mxCell id="pk-id" value="🔑 id : BIGINT (PK, AUTO_INCREMENT)" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontSize=14;strokeWidth=2;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="40" width="400" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Separator -->
+        <mxCell id="separator1" value="" style="line;strokeWidth=3;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="80" width="400" height="10" as="geometry" />
+        </mxCell>
+        
+        <!-- Attributes -->
+        <mxCell id="attr-title" value="title : VARCHAR(255) NOT NULL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=13;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="90" width="400" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="attr-amount" value="amount : DECIMAL(12,2) NOT NULL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=13;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="125" width="400" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="attr-category" value="category : VARCHAR(100) NOT NULL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=13;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="160" width="400" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="attr-date" value="expense_date : DATE NOT NULL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=13;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="195" width="400" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="attr-notes" value="notes : TEXT (Optional)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=13;fontColor=#666666;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="230" width="400" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- Separator -->
+        <mxCell id="separator2" value="" style="line;strokeWidth=2;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;strokeWidth=1;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="265" width="400" height="10" as="geometry" />
+        </mxCell>
+        
+        <!-- Constraints Info -->
+        <mxCell id="constraints" value="⚙️ Constraints:&#xa;• Primary Key: id (AUTO_INCREMENT)&#xa;• All fields required except notes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=2;fontColor=#666666;" vertex="1" parent="expenses-entity">
+          <mxGeometry y="275" width="400" height="55" as="geometry" />
+        </mxCell>
+        
+        <!-- Database Info Box -->
+        <mxCell id="db-info" value="📊 DATABASE INFORMATION" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="840" y="150" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="db-type" value="Database: H2 (In-Memory)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="db-info">
+          <mxGeometry y="35" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="db-table" value="Table: expenses" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="db-info">
+          <mxGeometry y="65" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="db-app" value="Application: Spring Boot" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="db-info">
+          <mxGeometry y="95" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="db-orm" value="ORM: Spring Data JDBC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="db-info">
+          <mxGeometry y="125" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="db-design" value="Design: Single Table (Simple)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="db-info">
+          <mxGeometry y="155" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend Box -->
+        <mxCell id="legend-box" value="📖 LEGEND" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="150" width="280" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-pk" value="🔑 = Primary Key (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+          <mxGeometry y="35" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-nn" value="NOT NULL = Required Field" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+          <mxGeometry y="65" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-optional" value="Optional = Can be NULL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+          <mxGeometry y="95" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-auto" value="AUTO_INCREMENT = Auto ID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="legend-box">
+          <mxGeometry y="125" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Field Details Box -->
+        <mxCell id="details-box" value="📝 FIELD DETAILS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="384" y="530" width="400" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="detail-id" value="• id: Unique identifier for each expense" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="details-box">
+          <mxGeometry y="35" width="400" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="detail-title" value="• title: Brief description of the expense" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="details-box">
+          <mxGeometry y="63" width="400" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="detail-amount" value="• amount: Expense amount (2 decimal places)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="details-box">
+          <mxGeometry y="91" width="400" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="detail-category" value="• category: Expense category (e.g., Food, Transport)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="details-box">
+          <mxGeometry y="119" width="400" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="detail-date" value="• expense_date: Date when expense occurred" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" vertex="1" parent="details-box">
+          <mxGeometry y="147" width="400" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="detail-notes" value="• notes: Additional details (optional)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#666666;" vertex="1" parent="details-box">
+          <mxGeometry y="175" width="400" height="28" as="geometry" />
+        </mxCell>
+        
+        <!-- Features Box -->
+        <mxCell id="features-box" value="✨ FEATURES" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="360" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="feat-1" value="✓ Track daily expenses" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="features-box">
+          <mxGeometry y="35" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="feat-2" value="✓ Categorize expenses" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="features-box">
+          <mxGeometry y="65" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="feat-3" value="✓ Add optional notes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="features-box">
+          <mxGeometry y="95" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="feat-4" value="✓ View expense history" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="features-box">
+          <mxGeometry y="125" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="feat-5" value="✓ Simple & lightweight" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="features-box">
+          <mxGeometry y="155" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Tech Stack Box -->
+        <mxCell id="tech-box" value="🔧 TECHNOLOGY STACK" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="840" y="390" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="tech-1" value="Backend: Spring Boot" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="tech-box">
+          <mxGeometry y="35" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tech-2" value="Database: H2 (In-Memory)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="tech-box">
+          <mxGeometry y="65" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tech-3" value="Frontend: HTML, CSS, JS" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="tech-box">
+          <mxGeometry y="95" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tech-4" value="Build Tool: Maven" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="tech-box">
+          <mxGeometry y="125" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tech-5" value="API: RESTful endpoints" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="tech-box">
+          <mxGeometry y="155" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Sample Data Box -->
+        <mxCell id="sample-box" value="📋 SAMPLE DATA EXAMPLE" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=35;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="600" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="sample-1" value="id: 1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontFamily=Courier New;" vertex="1" parent="sample-box">
+          <mxGeometry y="35" width="280" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="sample-2" value="title: 'Grocery Shopping'" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontFamily=Courier New;" vertex="1" parent="sample-box">
+          <mxGeometry y="58" width="280" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="sample-3" value="amount: 1250.50" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontFamily=Courier New;" vertex="1" parent="sample-box">
+          <mxGeometry y="81" width="280" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="sample-4" value="category: 'Food'" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontFamily=Courier New;" vertex="1" parent="sample-box">
+          <mxGeometry y="104" width="280" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="sample-5" value="expense_date: '2025-10-13'" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontFamily=Courier New;" vertex="1" parent="sample-box">
+          <mxGeometry y="127" width="280" height="23" as="geometry" />
+        </mxCell>
+        
+        <!-- Footer Note -->
+        <mxCell id="footer" value="This diagram represents the current simple expense tracker database schema with a single table design." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="384" y="770" width="400" height="30" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

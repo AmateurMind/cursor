@@ -2,3 +2,4 @@ com\example\expenses\repository\ExpenseRepository.class
 com\example\expenses\controller\ExpenseController.class
 com\example\expenses\ExpensesTrackerApplication.class
 com\example\expenses\model\Expense.class
+com\example\expenses\controller\AiController.class

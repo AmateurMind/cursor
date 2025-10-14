@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,10 @@ public class ExpenseController {
 
     @PostMapping
     public ResponseEntity<Expense> create(@Valid @RequestBody Expense expense) {
+        // Set current date if not provided
+        if (expense.getExpenseDate() == null) {
+            expense.setExpenseDate(LocalDate.now());
+        }
         Long id = repository.create(expense);
         expense.setId(id);
         return ResponseEntity.created(URI.create("/api/expenses/" + id)).body(expense);
@@ -41,6 +46,10 @@ public class ExpenseController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody Expense expense) {
+        // Set current date if not provided
+        if (expense.getExpenseDate() == null) {
+            expense.setExpenseDate(LocalDate.now());
+        }
         int updated = repository.update(id, expense);
         if (updated == 0) {
             return ResponseEntity.notFound().build();
