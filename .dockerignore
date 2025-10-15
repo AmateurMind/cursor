@@ -1,0 +1,12 @@
+# Ignore local build and VCS metadata
+.target
+/target
+**/target
+.git
+.github
+.gitignore
+.idea
+.vscode
+*.iml
+.DS_Store
+node_modules

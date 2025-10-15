@@ -10,6 +10,13 @@ import java.time.LocalDate;
 public class Expense {
     private Long id;
 
+    // Optional ownership context (defaults applied server-side if null)
+    private Long userId;
+    private Long accountId;
+
+    // Optional normalized link (computed from category name)
+    private Long categoryId;
+
     @NotBlank
     private String title;
 
@@ -30,6 +37,30 @@ public class Expense {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getTitle() {

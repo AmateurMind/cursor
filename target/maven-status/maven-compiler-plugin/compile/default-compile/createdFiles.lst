@@ -1,5 +1,11 @@
 com\example\expenses\repository\ExpenseRepository.class
+com\example\expenses\repository\AccountRepository.class
 com\example\expenses\controller\ExpenseController.class
+com\example\expenses\repository\UserRepository.class
 com\example\expenses\ExpensesTrackerApplication.class
+com\example\expenses\model\Account.class
+com\example\expenses\controller\AccountController.class
+com\example\expenses\controller\UserController.class
 com\example\expenses\model\Expense.class
+com\example\expenses\model\User.class
 com\example\expenses\controller\AiController.class

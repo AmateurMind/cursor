@@ -3,7 +3,7 @@ Expense Tracker (Spring Boot + JDBC + MySQL)
 build with 
 $ & "$env:USERPROFILE\scoop\apps\maven\current\bin\mvn.cmd" package -DskipTests
 
-
+$procs = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*expenses-tracker-0.0.1-SNAPSHOT.jar*' }; if($procs){ $procs | ForEach-Object { Stop-Process -Id $_.ProcessId -Force } }; & "$env:USERPROFILE\scoop\apps\maven\current\bin\mvn.cmd" -DskipTests clean package
 
  run with 
 $env:GEMINI_API_KEY = "AIzaSyBQ1qqJICZ4lBpKsZmBc_NUr6STO-Gsklg"; $env:GEMINI_MODEL = "gemini-2.0-flash"; java -jar .\target\expenses-tracker-0.0.1-SNAPSHOT.jar --server.port=8081

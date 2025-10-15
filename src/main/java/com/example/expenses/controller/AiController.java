@@ -1,5 +1,7 @@
 package com.example.expenses.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -21,16 +23,29 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class AiController {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     @PostMapping("/suggest-category")
     public ResponseEntity<Map<String, String>> suggestCategory(@RequestBody Map<String, Object> expense) {
         String title = asString(expense.get("title"));
         String notes = asString(expense.get("notes"));
+
+        // Hard rules requested by user: prioritize these over AI
+        String hard = specialCategoryFromTitle(title);
+        if (StringUtils.hasText(hard)) {
+            Map<String, String> body = new HashMap<>();
+            body.put("category", hard);
+            body.put("source", "rule-based");
+            return ResponseEntity.ok(body);
+        }
+
         String fallback = ruleBasedGuess(title + " " + notes);
 
         String apiKey = System.getenv("GEMINI_API_KEY");
         if (!StringUtils.hasText(apiKey)) {
+            String normalized = normalizeCategory(fallback, title + " " + notes);
             Map<String, String> body = new HashMap<>();
-            body.put("category", fallback);
+            body.put("category", normalized);
             body.put("source", "rule-based");
             return ResponseEntity.ok(body);
         }
@@ -68,8 +83,9 @@ public class AiController {
                 if (!StringUtils.hasText(category)) {
                     category = fallback;
                 }
+                String normalized = normalizeCategory(category, title + " " + notes);
                 Map<String, String> body = new HashMap<>();
-                body.put("category", category.trim());
+                body.put("category", normalized);
                 body.put("source", "gemini");
                 return ResponseEntity.ok(body);
             }
@@ -79,8 +95,9 @@ public class AiController {
             // fall through to fallback
         }
 
+        String normalized = normalizeCategory(fallback, title + " " + notes);
         Map<String, String> body = new HashMap<>();
-        body.put("category", fallback);
+        body.put("category", normalized);
         body.put("source", "rule-based");
         return ResponseEntity.ok(body);
     }
@@ -102,36 +119,83 @@ public class AiController {
     }
 
     private static String extractGeminiText(String json) {
-        // extremely small, naive extraction to avoid adding JSON libs
-        // looks for "text":"..." in Gemini response
         try {
-            int idx = json.indexOf("\"text\":");
-            if (idx == -1) return "";
-            int start = json.indexOf('"', idx + 7);
-            if (start == -1) return "";
-            int end = json.indexOf('"', start + 1);
-            if (end == -1) return "";
-            String content = json.substring(start + 1, end);
-            return content.replace("\\n", " ").trim();
+            JsonNode root = MAPPER.readTree(json);
+            // Preferred path per Gemini schema
+            JsonNode node = root.at("/candidates/0/content/parts/0/text");
+            if (node != null && node.isTextual() && StringUtils.hasText(node.asText())) {
+                return sanitize(node.asText());
+            }
+            // Fallback: find first "text" field anywhere
+            String found = findFirstText(root);
+            return sanitize(found);
         } catch (Exception e) {
             return "";
         }
     }
 
+    private static String findFirstText(JsonNode node) {
+        if (node == null) return "";
+        if (node.has("text") && node.get("text").isTextual()) {
+            return node.get("text").asText();
+        }
+        // search arrays/objects recursively
+        for (JsonNode child : node) {
+            String v = findFirstText(child);
+            if (StringUtils.hasText(v)) return v;
+        }
+        return "";
+    }
+
+    private static String sanitize(String s) {
+        if (!StringUtils.hasText(s)) return "";
+        String v = s.replace("\r", " ").replace("\n", " ").trim();
+        // keep it concise: first 4 words maximum
+        String[] parts = v.split("\\s+");
+        if (parts.length <= 4) return v;
+        return String.join(" ", parts[0], parts[1], parts[2], parts[3]);
+    }
+
     private static String ruleBasedGuess(String text) {
         String t = (text == null ? "" : text).toLowerCase();
-        if (t.contains("rent") || t.contains("lease")) return "Rent";
-        if (t.contains("uber") || t.contains("lyft") || t.contains("taxi")) return "Transport";
-        if (t.contains("flight") || t.contains("air") || t.contains("hotel") || t.contains("travel")) return "Travel";
-        if (t.contains("grocery") || t.contains("supermarket") || t.contains("food") || t.contains("restaurant")) return "Food";
-        if (t.contains("electric") || t.contains("water") || t.contains("gas") || t.contains("utility") || t.contains("internet")) return "Utilities";
-        if (t.contains("medical") || t.contains("doctor") || t.contains("pharmacy")) return "Health";
-        if (t.contains("movie") || t.contains("netflix") || t.contains("entertainment")) return "Entertainment";
-        if (t.contains("amazon") || t.contains("shopping") || t.contains("store")) return "Shopping";
-        if (t.contains("education") || t.contains("tuition") || t.contains("course")) return "Education";
-        return "Misc";
+        // expanded heuristics to reduce "Misc"
+        if (t.contains("banana") || t.contains("watermelon") || t.contains("apple") || t.contains("mango") || t.contains("orange") || t.contains("grape") || t.contains("fruit") || t.contains("milk") || t.contains("bread")) return "grocery";
+        if (t.contains("chocolate") || t.contains("candy") || t.contains("snack") || t.contains("dessert")) return "treat";
+        if (t.contains("metro") || t.contains("bus") || t.contains("train") || t.contains("subway") || t.contains("ticket") || t.contains("fare") || t.contains("uber") || t.contains("lyft") || t.contains("taxi")) return "transit";
+
+        if (t.contains("rent") || t.contains("lease")) return "rent";
+        if (t.contains("flight") || t.contains("air") || t.contains("hotel") || t.contains("travel")) return "travel";
+        if (t.contains("grocery") || t.contains("supermarket") || t.contains("food") || t.contains("restaurant")) return "grocery";
+        if (t.contains("electric") || t.contains("water") || t.contains("gas") || t.contains("utility") || t.contains("internet")) return "utilities";
+        if (t.contains("medical") || t.contains("doctor") || t.contains("pharmacy")) return "health";
+        if (t.contains("movie") || t.contains("netflix") || t.contains("entertainment")) return "entertainment";
+        if (t.contains("amazon") || t.contains("shopping") || t.contains("store")) return "shopping";
+        if (t.contains("education") || t.contains("tuition") || t.contains("course")) return "education";
+        return "misc";
+    }
+
+    private static String normalizeCategory(String category, String text) {
+        String c = (category == null ? "" : category).trim().toLowerCase();
+        String t = (text == null ? "" : text).toLowerCase();
+        // text-driven normalization first (handles vague AI outputs)
+        if (t.contains("banana") || t.contains("watermelon") || t.contains("apple") || t.contains("mango") || t.contains("orange") || t.contains("grape") || t.contains("fruit") || t.contains("milk") || t.contains("bread")) c = "grocery";
+        if (t.contains("chocolate") || t.contains("candy") || t.contains("snack") || t.contains("dessert")) c = "treat";
+        if (t.contains("metro") || t.contains("bus") || t.contains("train") || t.contains("subway") || t.contains("ticket") || t.contains("fare") || t.contains("uber") || t.contains("lyft") || t.contains("taxi")) c = "transit";
+
+        // category synonym normalization
+        if (c.matches(".*\\btransport(ation)?\\b.*")) c = "transit";
+        if (c.equals("food") || c.equals("groceries") || c.equals("supermarket")) c = "grocery";
+        if (c.equals("healthcare")) c = "health";
+
+        if (!StringUtils.hasText(c)) return "misc";
+        return c;
+    }
+
+    private static String specialCategoryFromTitle(String title) {
+        String t = (title == null ? "" : title).toLowerCase();
+        if (t.contains("banana")) return "grocery";
+        if (t.contains("chocolate")) return "treat";
+        if (t.contains("metro") || t.contains("bus")) return "transit";
+        return null;
     }
 }
-
-
-
