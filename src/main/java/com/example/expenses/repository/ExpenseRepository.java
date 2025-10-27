@@ -28,6 +28,14 @@ public class ExpenseRepository {
         );
     }
 
+    public List<Expense> findAllByUserId(Long userId) {
+        return jdbcTemplate.query(
+                "SELECT id, title, amount, category, category_id AS categoryId, user_id AS userId, account_id AS accountId, expense_date AS expenseDate, notes FROM expenses WHERE user_id = ? ORDER BY expense_date DESC",
+                new BeanPropertyRowMapper<>(Expense.class),
+                userId
+        );
+    }
+
     public Optional<Expense> findById(Long id) {
         List<Expense> list = jdbcTemplate.query(
                 "SELECT id, title, amount, category, category_id AS categoryId, user_id AS userId, account_id AS accountId, expense_date AS expenseDate, notes FROM expenses WHERE id = ?",

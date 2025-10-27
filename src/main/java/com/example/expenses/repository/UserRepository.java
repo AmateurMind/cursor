@@ -22,16 +22,25 @@ public class UserRepository {
 
     public List<User> findAll() {
         return jdbcTemplate.query(
-                "SELECT id, email, name FROM users ORDER BY id",
+                "SELECT id, email, name, password_hash AS passwordHash FROM users ORDER BY id",
                 new BeanPropertyRowMapper<>(User.class)
         );
     }
 
     public Optional<User> findById(Long id) {
         List<User> list = jdbcTemplate.query(
-                "SELECT id, email, name FROM users WHERE id = ?",
+                "SELECT id, email, name, password_hash AS passwordHash FROM users WHERE id = ?",
                 new BeanPropertyRowMapper<>(User.class),
                 id
+        );
+        return list.stream().findFirst();
+    }
+
+    public Optional<User> findByEmail(String email) {
+        List<User> list = jdbcTemplate.query(
+                "SELECT id, email, name, password_hash AS passwordHash FROM users WHERE email = ?",
+                new BeanPropertyRowMapper<>(User.class),
+                email
         );
         return list.stream().findFirst();
     }
@@ -43,6 +52,19 @@ public class UserRepository {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, u.getEmail());
             ps.setString(2, u.getName());
+            return ps;
+        }, kh);
+        return kh.getKey().longValue();
+    }
+
+    public Long createWithPassword(String email, String name, String passwordHash) {
+        String sql = "INSERT INTO users (email, name, password_hash) VALUES (?, ?, ?)";
+        KeyHolder kh = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, email);
+            ps.setString(2, name);
+            ps.setString(3, passwordHash);
             return ps;
         }, kh);
         return kh.getKey().longValue();

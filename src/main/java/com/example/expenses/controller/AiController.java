@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -23,13 +22,6 @@ import java.util.Set;
 public class AiController {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    // Allowed labels for classification
-    private static final Set<String> LABELS = Set.of(
-            "electronics", "grocery", "treat", "transit", "utilities",
-            "health", "entertainment", "shopping", "education",
-            "rent", "travel", "misc"
-    );
 
     @PostMapping("/suggest-category")
     public ResponseEntity<Map<String, String>> suggestCategory(@RequestBody Map<String, Object> expense) {
@@ -60,14 +52,15 @@ public class AiController {
 
         try {
             // Build OpenAI Chat Completions payload
-String instruction = "You are an expense category classifier. Choose exactly ONE label from: "
-                    + LABELS + ".\nReturn ONLY the label text in lowercase.\n" +
+            String instruction = "You are an expense category classifier. Suggest a concise, lowercase category (1-2 words) for the expense.\n" +
                     "Examples:\n" +
                     "'laptop' -> electronics\n" +
+                    "'table' -> furniture\n" +
+                    "'rent payment' -> housing\n" +
                     "'apple 1kg' -> grocery\n" +
-                    "'pumpkin' -> grocery\n" +
-                    "'chocolate' -> treat\n" +
-                    "'bus ticket' -> transit";
+                    "'chocolate' -> treats\n" +
+                    "'bus ticket' -> transit\n" +
+                    "Return ONLY the category name in lowercase.";
             String user = "Title: '" + safe(title) + "'\nNotes: '" + safe(notes) + "'";
 
             String payload = "{\n" +
@@ -187,37 +180,10 @@ String instruction = "You are an expense category classifier. Choose exactly ONE
 
     private static String normalizeCategory(String category, String text) {
         String c = (category == null ? "" : category).trim().toLowerCase();
-        String t = (text == null ? "" : text).toLowerCase();
-
-        // Text-driven normalization (helps when AI outputs vague words)
-        if (t.contains("laptop") || t.contains("iphone") || t.contains("android") || t.contains("smartphone") || t.contains("tablet") || t.contains("macbook") || t.contains("charger") || t.contains("earbud") || t.contains("headphone")) c = "electronics";
-        if ((t.contains("apple") && (t.contains("store") || t.contains("iphone") || t.contains("mac") || t.contains("ipad")))) c = "electronics";
-if ((t.contains("banana") || t.contains("watermelon") || (t.contains("apple") && !(t.contains("store") || t.contains("iphone") || t.contains("mac") || t.contains("ipad"))) || t.contains("mango") || t.contains("orange") || t.contains("grape") || t.contains("fruit") || t.contains("milk") || t.contains("bread") || t.contains("vegetable") || t.contains("pumpkin") || t.contains("tomato") || t.contains("potato") || t.contains("onion") || t.contains("carrot"))) c = "grocery";
-        if (t.contains("chocolate") || t.contains("candy") || t.contains("snack") || t.contains("dessert") || t.contains("ice cream") || t.contains("ice-cream")) c = "treat";
-        if (t.contains("metro") || t.contains("bus") || t.contains("train") || t.contains("subway") || t.contains("ticket") || t.contains("fare") || t.contains("uber") || t.contains("lyft") || t.contains("taxi")) c = "transit";
-
-        // Normalize synonyms
-        if (c.matches(".*\\belectronic(s)?\\b.*") || c.matches(".*\\btech(nology)?\\b.*") || c.contains("gadgets")) c = "electronics";
-        if (c.equals("food") || c.equals("groceries") || c.equals("supermarket") || c.equals("restaurant")) c = "grocery";
-        if (c.matches(".*\\btransport(ation)?\\b.*")) c = "transit";
+        // Basic synonym normalization only
+        if (c.equals("food") || c.equals("groceries")) c = "grocery";
+        if (c.equals("transportation")) c = "transit";
         if (c.equals("healthcare") || c.equals("medicine")) c = "health";
-
-        // Snap to allowed labels; otherwise default to misc
-        if (!LABELS.contains(c)) {
-            if (c.contains("elect") || c.contains("tech") || c.contains("device")) c = "electronics";
-            else if (c.contains("groc") || c.contains("food")) c = "grocery";
-            else if (c.contains("snack") || c.contains("sweet") || c.contains("dessert")) c = "treat";
-            else if (c.contains("trans") || c.contains("bus") || c.contains("train") || c.contains("taxi")) c = "transit";
-            else if (c.contains("utilit") || c.contains("internet") || c.contains("wifi") || c.contains("electric")) c = "utilities";
-            else if (c.contains("medic") || c.contains("health")) c = "health";
-            else if (c.contains("movie") || c.contains("entertain")) c = "entertainment";
-            else if (c.contains("shop") || c.contains("store") || c.contains("mall")) c = "shopping";
-            else if (c.contains("educat") || c.contains("tuition") || c.contains("course")) c = "education";
-            else if (c.contains("rent") || c.contains("lease")) c = "rent";
-            else if (c.contains("travel") || c.contains("flight") || c.contains("hotel")) c = "travel";
-            else c = "misc";
-        }
-
         if (!StringUtils.hasText(c)) return "misc";
         return c;
     }

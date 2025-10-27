@@ -1,8 +1,11 @@
 const api = '/api/expenses';
 const aiApi = '/api/ai/suggest-category';
+const authApi = '/api/auth';
 
 async function fetchExpenses() {
-  const res = await fetch(api);
+  const user = getCurrentUser();
+  const url = user ? `${api}?userId=${encodeURIComponent(user.id)}` : api;
+  const res = await fetch(url);
   const data = await res.json();
   renderTable(data);
   renderCharts(data);
@@ -30,13 +33,15 @@ function renderTable(expenses) {
 
 function getFormData() {
   const expenseDate = document.getElementById('expenseDate').value;
+  const user = getCurrentUser();
   return {
     id: document.getElementById('id').value || null,
     title: document.getElementById('title').value,
     amount: parseFloat(document.getElementById('amount').value),
     category: document.getElementById('category').value,
     expenseDate: expenseDate || new Date().toISOString().split('T')[0],
-    notes: document.getElementById('notes').value || null
+    notes: document.getElementById('notes').value || null,
+    userId: user ? user.id : null
   };
 }
 
@@ -80,6 +85,7 @@ async function onTableClick(evt) {
 function resetForm() { setFormData({}); }
 
 document.getElementById('expense-form').addEventListener('submit', saveExpense);
+initAuthUI();
 document.getElementById('reset').addEventListener('click', resetForm);
 document.querySelector('#expenses-table tbody').addEventListener('click', onTableClick);
 
@@ -141,5 +147,75 @@ function renderCharts(expenses) {
 }
 
 fetchExpenses();
+
+// --- Auth (simple) ---
+function getCurrentUser(){
+  try { return JSON.parse(localStorage.getItem('currentUser')||''); } catch(e){ return null; }
+}
+function setCurrentUser(u){ if(u){ localStorage.setItem('currentUser', JSON.stringify(u)); } else { localStorage.removeItem('currentUser'); } }
+
+function initAuthUI(){
+  const bar = document.createElement('div');
+  bar.id = 'auth-bar';
+  bar.style.display = 'flex'; bar.style.gap='8px'; bar.style.alignItems='center'; bar.style.margin='8px 0';
+  bar.innerHTML = `
+    <span id="auth-status"></span>
+    <input id="auth-email" placeholder="email" style="max-width:200px;">
+    <input id="auth-name" placeholder="name (register)" style="max-width:160px;">
+    <input id="auth-password" placeholder="password" type="password" style="max-width:140px;">
+    <button id="btn-login">Login</button>
+    <button id="btn-register">Register</button>
+    <button id="btn-logout" style="display:none;">Logout</button>
+  `;
+  document.body.prepend(bar);
+  const user = getCurrentUser();
+  updateAuthStatus(user);
+  document.getElementById('btn-login').onclick = login;
+  document.getElementById('btn-register').onclick = register;
+  document.getElementById('btn-logout').onclick = ()=>{ setCurrentUser(null); updateAuthStatus(null); fetchExpenses(); };
+}
+
+function updateAuthStatus(user){
+  const status = document.getElementById('auth-status');
+  const email = document.getElementById('auth-email');
+  const name = document.getElementById('auth-name');
+  const pwd = document.getElementById('auth-password');
+  const btnL = document.getElementById('btn-login');
+  const btnR = document.getElementById('btn-register');
+  const btnO = document.getElementById('btn-logout');
+  if(user){
+    status.textContent = `Logged in as ${user.name} (${user.email})`;
+    email.style.display = name.style.display = pwd.style.display = btnL.style.display = btnR.style.display = 'none';
+    btnO.style.display = '';
+  } else {
+    status.textContent = 'Not logged in';
+    email.style.display = name.style.display = pwd.style.display = btnL.style.display = btnR.style.display = '';
+    btnO.style.display = 'none';
+  }
+}
+
+async function login(){
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if(!email || !password){ alert('email and password required'); return; }
+  try{
+    const res = await fetch(authApi + '/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+    if(!res.ok){ const j = await res.json(); alert(j.error||'login failed'); return; }
+    const u = await res.json(); setCurrentUser(u); updateAuthStatus(u); fetchExpenses();
+  }catch(e){ alert('login error'); }
+}
+
+async function register(){
+  const email = document.getElementById('auth-email').value.trim();
+  const name = document.getElementById('auth-name').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if(!email || !name || !password){ alert('email, name, password required'); return; }
+  try{
+    const res = await fetch(authApi + '/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, name, password}) });
+    if(!res.ok){ const j = await res.json(); alert(j.error||'register failed'); return; }
+    const u = await fetch(authApi + '/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) }).then(r=>r.json());
+    setCurrentUser(u); updateAuthStatus(u); fetchExpenses();
+  }catch(e){ alert('register error'); }
+}
 
 

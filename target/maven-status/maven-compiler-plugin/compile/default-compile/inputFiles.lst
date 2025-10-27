@@ -1,11 +1,16 @@
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\controller\AccountController.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\controller\AiController.java
+F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\controller\AuthController.java
+F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\controller\CategoryController.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\controller\ExpenseController.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\controller\UserController.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\ExpensesTrackerApplication.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\model\Account.java
+F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\model\Category.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\model\Expense.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\model\User.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\repository\AccountRepository.java
+F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\repository\CategoryRepository.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\repository\ExpenseRepository.java
 F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\repository\UserRepository.java
+F:\DBMS PROJECT\cursor\src\main\java\com\example\expenses\util\SecurityUtil.java
