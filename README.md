@@ -51,20 +51,7 @@ Database Schema
 - Table: expenses(id, title, amount, category, expense_date, notes)
 - See `schema.sql` and sample `data.sql`.
 
-Sprint Plan (aligned with syllabus)
-- Sprint 1: Requirement & Scope, ERD, Relational Model, Normalization draft
-- Sprint 2: Backend setup (Spring Boot, JDBC, MySQL), schema + CRUD repository
-- Sprint 3: REST controllers, validation, CORS, seed data
-- Sprint 4: Basic frontend (HTML/CSS/JS) for CRUD, client-side validation
-- Sprint 5: Testing (manual + basic validation), documentation
 
-Documentation Checklist
-- Title, Abstract, Introduction, Scope
-- Requirements, ER diagram, Relational schema, Normalization notes
-- Data Dictionary, SQL schema
-- GUI screenshots, Source code structure
-- Testing document (test cases, sample data)
-- Conclusion
 
 Notes
 - Credentials currently set for local dev: root/password. Change for production.
