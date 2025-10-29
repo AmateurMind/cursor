@@ -19,5 +19,5 @@ body.light{ @apply bg-gray-50 text-gray-900; }
 .light .label{ @apply text-gray-700; }
 
 input:checked ~ .dot {
-  transform: translateX(100%);
+  transform: translateX(2rem);
 }

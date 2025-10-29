@@ -1,5 +1,5 @@
 export type User = { id: number; email: string; name: string }
-export type Expense = { id?: number; title: string; amount: number; category: string; expenseDate: string; notes?: string|null; userId?: number|null }
+export type Expense = { id?: number; title: string; amount: number; category: string; expenseDate: string; notes?: string|null; userId?: number|null; accountId?: number }
 export type Category = { id: number; name: string; type?: string; color?: string }
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE || ''

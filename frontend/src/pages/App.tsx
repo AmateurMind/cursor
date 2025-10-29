@@ -22,7 +22,7 @@ export default function App(){
   })
   const [list, setList] = useState<Expense[]>([])
   const [categories, setCategories] = useState<string[]>([])
-  const [form, setForm] = useState<Expense>({ title:'', amount:0, category:'', expenseDate: new Date().toISOString().slice(0,10), notes:'', userId: user?.id||null })
+  const [form, setForm] = useState<Expense>({ title:'', amount:0, category:'', expenseDate: new Date().toISOString().slice(0,10), notes:'', userId: user?.id||null, accountId: 1 })
   const [amountText, setAmountText] = useState<string>('0')
   const [customCategory, setCustomCategory] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -64,7 +64,7 @@ export default function App(){
     const amount = parseFloat(amountText || '0') || 0
     const payload: Expense = { ...form, amount, userId: user.id }
     await api.saveExpense(payload)
-    setForm({ title:'', amount:0, category:'', expenseDate: new Date().toISOString().slice(0,10), notes:'', userId: user.id })
+    setForm({ title:'', amount:0, category:'', expenseDate: new Date().toISOString().slice(0,10), notes:'', userId: user.id, accountId: 1 })
     setAmountText('0')
     await refresh()
   }
@@ -149,12 +149,40 @@ export default function App(){
                     )}
                   </Field>
                   <Field label="Date"><input type="date" className="input" value={form.expenseDate} onChange={e=>setForm({...form, expenseDate:e.target.value})}/></Field>
+                  <Field label="Smart Categorize">
+                    <button className="btn bg-neutral-700 text-white hover:bg-neutral-600 w-full" onClick={smart}>Smart Categorize</button>
+                  </Field>
+                  <Field label="Payment Mode">
+                    <div className="flex gap-2">
+                      <button 
+                        type="button" 
+                        className={`btn flex-1 ${
+                          form.accountId === 1 
+                            ? 'bg-red-600 text-white' 
+                            : 'bg-neutral-700 text-neutral-300 hover:bg-neutral-600'
+                        }`}
+                        onClick={() => setForm({...form, accountId: 1})}
+                      >
+                        Cash
+                      </button>
+                      <button 
+                        type="button" 
+                        className={`btn flex-1 ${
+                          form.accountId === 2 
+                            ? 'bg-red-600 text-white' 
+                            : 'bg-neutral-700 text-neutral-300 hover:bg-neutral-600'
+                        }`}
+                        onClick={() => setForm({...form, accountId: 2})}
+                      >
+                        Online
+                      </button>
+                    </div>
+                  </Field>
                 </div>
                 <Field label="Notes"><input className="input" value={form.notes||''} onChange={e=>setForm({...form, notes:e.target.value})} placeholder="Optional"/></Field>
-                <div className="flex gap-3 flex-wrap">
-                  <button className="btn bg-red-600 text-white hover:bg-red-700" onClick={save}>Save</button>
-                  <button className="btn bg-neutral-700 text-white hover:bg-neutral-600" onClick={()=>{ setForm({ title:'', amount:0, category:'', expenseDate:new Date().toISOString().slice(0,10), notes:'', userId:user.id }); setAmountText('0'); }}>Reset</button>
-                  <button className="btn bg-neutral-700 text-white hover:bg-neutral-600" onClick={smart}>Smart Categorize</button>
+                <div className="flex gap-3">
+                  <button className="btn bg-red-600 text-white hover:bg-red-700 flex-1" onClick={save}>Save</button>
+                  <button className="btn bg-neutral-700 text-white hover:bg-neutral-600 flex-1" onClick={()=>{ setForm({ title:'', amount:0, category:'', expenseDate:new Date().toISOString().slice(0,10), notes:'', userId:user.id, accountId: 1 }); setAmountText('0'); }}>Reset</button>
                 </div>
               </div>
 
@@ -199,6 +227,7 @@ export default function App(){
                       <tr>
                         <th className="pb-3 pr-4 font-medium">Transaction</th>
                         <th className="pb-3 pr-4 font-medium">Date</th>
+                        <th className="pb-3 pr-4 font-medium">Payment Mode</th>
                         <th className="pb-3 pr-4 text-right font-medium">Amount</th>
                         <th className="pb-3 text-right font-medium">Actions</th>
                       </tr>
@@ -211,6 +240,7 @@ export default function App(){
                             <div className="text-xs dark:text-neutral-400 light:text-gray-500 capitalize">{e.category}{e.notes ? ` • ${e.notes}` : ''}</div>
                           </td>
                           <td className="py-3 pr-4 dark:text-neutral-300 light:text-gray-600">{e.expenseDate}</td>
+                          <td className="py-3 pr-4 dark:text-neutral-300 light:text-gray-600 capitalize">{e.accountId === 1 ? 'Cash' : e.accountId === 2 ? 'Online' : '-'}</td>
                           <td className="py-3 pr-4 text-right font-semibold">₹{e.amount}</td>
                           <td className="py-3 text-right space-x-3">
                             <button className="dark:text-white dark:hover:text-neutral-300 light:text-gray-700 light:hover:text-gray-900" onClick={()=>{ setForm({ ...(e as any), expenseDate: e.expenseDate }); setAmountText(String(e.amount ?? '0')); }}>Edit</button>
